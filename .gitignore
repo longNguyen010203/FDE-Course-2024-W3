@@ -18,4 +18,5 @@ minio/
 mysql/
 postgresql/
 venv/
+
 .env/
