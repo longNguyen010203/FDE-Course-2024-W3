@@ -1,0 +1,9 @@
+dagster==1.7.2
+dagit==1.7.2
+dagster-postgres
+pandas==2.2.2
+pyarrow==16.0.0
+minio==7.2.5
+pymysql
+cryptography==42.0.5
+psycopg2-binary==2.9.9
