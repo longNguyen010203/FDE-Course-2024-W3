@@ -1,8 +1,8 @@
 FROM python:3.10-slim
 
-WORKDIR /opt/dagster/app/elt_pipeline
+WORKDIR /opt/dagster/app
 
-COPY requirements.txt /opt/dagster/app/elt_pipeline
+COPY requirements.txt /opt/dagster/app
 
 RUN pip install --upgrade pip && pip install -r requirements.txt
 

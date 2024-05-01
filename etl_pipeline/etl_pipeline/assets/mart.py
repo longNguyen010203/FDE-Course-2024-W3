@@ -3,9 +3,8 @@ import pandas as pd
 from dagster import multi_asset, MetadataValue
 from dagster import AssetExecutionContext, Output
 from dagster import AssetIn, AssetOut
-from dagster import MonthlyPartitionsDefinition
 
-from . import constants
+from ..partitions import monthly_partitions
 
 
 GROUP_NAME = "mart"
@@ -41,7 +40,7 @@ GROUP_NAME = "mart"
     name="olist_orders_dataset",
     required_resource_keys={"psql_io_manager"},
     compute_kind="postgres",
-    partitions_def=MonthlyPartitionsDefinition(start_date=constants.START_DATE)
+    partitions_def=monthly_partitions
 )
 def olist_orders_dataset(context: AssetExecutionContext,
                          bronze_olist_orders_dataset: pd.DataFrame) -> Output[pd.DataFrame]:

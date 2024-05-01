@@ -2,9 +2,8 @@ import pandas as pd
 
 from dagster import asset, Output, MetadataValue
 from dagster import AssetExecutionContext
-from dagster import MonthlyPartitionsDefinition
 
-from . import constants
+from ..partitions import monthly_partitions
 
 
 GROUP_NAME = "raw"
@@ -15,7 +14,7 @@ GROUP_NAME = "raw"
     io_manager_key="minio_io_manager",
     key_prefix=["bronze", "ecom"],
     compute_kind="SQL",
-    partitions_def=MonthlyPartitionsDefinition(start_date=constants.START_DATE),
+    partitions_def=monthly_partitions,
     group_name=GROUP_NAME
 )
 def bronze_olist_orders_dataset(context: AssetExecutionContext) -> Output[pd.DataFrame]:

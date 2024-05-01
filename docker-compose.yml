@@ -59,7 +59,7 @@ services:
     container_name: etl_pipeline
     image: etl_pipeline:latest
     volumes:
-      - ./etl_pipeline:/opt/dagster/app/elt_pipeline
+      - ./etl_pipeline:/opt/dagster/app
     env_file: .env
     networks:
       - de_network

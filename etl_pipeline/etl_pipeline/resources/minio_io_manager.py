@@ -39,6 +39,7 @@ class MinIOIOManager(IOManager):
         
         if context.has_asset_partitions:
             start, end = context.asset_partitions_time_window
+            # partition_str = context.asset_partition_key
             partition_str = start.strftime("%Y%m%d")
             return os.path.join(key, f"{partition_str}.pq"), tmp_file_path
         else:
