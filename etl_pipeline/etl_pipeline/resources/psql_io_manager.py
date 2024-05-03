@@ -34,7 +34,7 @@ class PostgreSQLIOManager(IOManager):
 
     def handle_output(self, context: OutputContext, obj: pd.DataFrame):
         schema, table = context.asset_key.path[-2], context.asset_key.path[-1]
-        tmp_tbl = f"{table}_tmp_{datetime.now().strftime('%Y_%m_%d')}"
+        tmp_tbl = f"{table}_tmp_{datetime.now().strftime('%Y_%m')}"
         
         with connect_psql(self._config) as db_conn:
             primary_keys = (context.metadata or {}).get("primary_keys", [])

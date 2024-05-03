@@ -1,8 +1,9 @@
 from dagster import MonthlyPartitionsDefinition
 
-from ..assets import constants
+from .. import constants
 
 
 monthly_partitions = MonthlyPartitionsDefinition(
-    start_date=constants.START_DATE
+    start_date=constants.START_DATE,
+    end_date=constants.END_DATE,
 )

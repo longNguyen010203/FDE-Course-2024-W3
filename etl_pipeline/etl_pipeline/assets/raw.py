@@ -7,13 +7,14 @@ from ..partitions import monthly_partitions
 
 
 GROUP_NAME = "raw"
+COMPUTE_KIND = "MySQL"
 
 @asset(
     name="bronze_olist_orders_dataset",
     required_resource_keys={"mysql_io_manager"},
     io_manager_key="minio_io_manager",
     key_prefix=["bronze", "ecom"],
-    compute_kind="SQL",
+    compute_kind=COMPUTE_KIND,
     partitions_def=monthly_partitions,
     group_name=GROUP_NAME
 )
@@ -27,8 +28,11 @@ def bronze_olist_orders_dataset(context: AssetExecutionContext) -> Output[pd.Dat
     try:
         partition_date_str = context.asset_partition_key_for_output()
         partition_by = "order_purchase_timestamp"
-        sql_stm += f" WHERE CAST({partition_by} AS DATE) = '{partition_date_str}'"
-        context.log.info(f"Partition by {partition_by} = {partition_date_str}")
+        # sql_stm += f" WHERE DATE_FORMAT({partition_by}, '%Y-%m') = '{partition_date_str}'"
+        sql_stm += f""" WHERE YEAR({partition_by}) = {partition_date_str[:4]} AND 
+                        MONTH({partition_by}) = {partition_date_str[5:7]}"""
+        context.log.info(f"Partition by {partition_by} = {partition_date_str[:7]}")
+        context.log.info(f"SQL query: {sql_stm}")
     except Exception:
         context.log.info(f"olist_orders_dataset has no partition key!")
     
@@ -49,7 +53,7 @@ def bronze_olist_orders_dataset(context: AssetExecutionContext) -> Output[pd.Dat
     io_manager_key="minio_io_manager",
     required_resource_keys={"mysql_io_manager"},
     key_prefix=["bronze", "ecom"],
-    compute_kind="SQL",
+    compute_kind=COMPUTE_KIND,
     group_name=GROUP_NAME
 )
 def bronze_olist_order_items_dataset(context: AssetExecutionContext) -> Output[pd.DataFrame]:
@@ -75,7 +79,7 @@ def bronze_olist_order_items_dataset(context: AssetExecutionContext) -> Output[p
     io_manager_key="minio_io_manager",
     required_resource_keys={"mysql_io_manager"},
     key_prefix=["bronze", "ecom"],
-    compute_kind="SQL",
+    compute_kind=COMPUTE_KIND,
     group_name=GROUP_NAME
 )
 def bronze_olist_order_payments_dataset(context: AssetExecutionContext) -> Output[pd.DataFrame]:
@@ -101,7 +105,7 @@ def bronze_olist_order_payments_dataset(context: AssetExecutionContext) -> Outpu
     io_manager_key="minio_io_manager",
     required_resource_keys={"mysql_io_manager"},
     key_prefix=["bronze", "ecom"],
-    compute_kind="SQL",
+    compute_kind=COMPUTE_KIND,
     group_name=GROUP_NAME
 )
 def bronze_olist_products_dataset(context: AssetExecutionContext) -> Output[pd.DataFrame]:

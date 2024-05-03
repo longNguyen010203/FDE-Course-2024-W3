@@ -33,16 +33,18 @@ class MinIOIOManager(IOManager):
         layer, schema, table = context.asset_key.path
         key = "/".join([layer, schema, table.replace(f"{layer}_", "")])
         tmp_file_path = "/tmp/file-{}-{}.parquet".format(
-            datetime.today().strftime("%Y%m%d%H%M%S"), 
+            datetime.today().strftime("%Y%m"), 
             "-".join(context.asset_key.path)
         )
         
         if context.has_asset_partitions:
             start, end = context.asset_partitions_time_window
             # partition_str = context.asset_partition_key
-            partition_str = start.strftime("%Y%m%d")
+            partition_str = start.strftime("%Y%m")
+            context.log.info(f"INFO: {os.path.join(key, partition_str)}.pq, {tmp_file_path}")
             return os.path.join(key, f"{partition_str}.pq"), tmp_file_path
         else:
+            context.log.info(f"INFO: {key}.pq, {tmp_file_path}")
             return f"{key}.pq", tmp_file_path
 
     def handle_output(self, context: OutputContext, obj: pd.DataFrame):
